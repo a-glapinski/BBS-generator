@@ -14,7 +14,7 @@ class BBSGenerator(
         require(x.isCoprimeTo(n)) { "X must be coprime to N = P * Q." }
     }
 
-    fun generateSequence(length: Int) = buildString {
+    fun generateSequence(length: Int) = buildString(length) {
         var generatedValue = x.squared() % n
 
         for (i in 0 until length) {

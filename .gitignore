@@ -18,3 +18,5 @@ HELP.md
 *.iml
 *.ipr
 /out/
+
+.kotlintest
