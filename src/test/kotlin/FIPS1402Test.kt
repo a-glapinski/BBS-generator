@@ -1,6 +1,8 @@
 import io.kotlintest.matchers.doubles.shouldBeGreaterThan
 import io.kotlintest.matchers.doubles.shouldBeLessThan
+import io.kotlintest.matchers.numerics.shouldBeGreaterThan
 import io.kotlintest.matchers.numerics.shouldBeInRange
+import io.kotlintest.matchers.numerics.shouldBeLessThan
 import io.kotlintest.matchers.numerics.shouldNotBeGreaterThan
 import io.kotlintest.specs.AnnotationSpec
 
@@ -16,12 +18,12 @@ class FIPS1402Test : AnnotationSpec() {
      */
     private val regex = "([01])\\1*".toRegex()
 
-
     @Test
     fun singleBitsTest() {
         val numberOf1Bits = sequence.count { it == '1' }
 
-        numberOf1Bits shouldBeInRange (9725 exclusiveRangeTo 10275)
+        numberOf1Bits shouldBeGreaterThan 9725
+        numberOf1Bits shouldBeLessThan 10275
     }
 
     @Test
@@ -30,17 +32,21 @@ class FIPS1402Test : AnnotationSpec() {
             matchResult.value
         }
 
-        val seriesOf0sLengthsCount = consecutiveBitsSeries
+        val frequenciesBySeriesOf0sLengths: Map<Int, Int> = consecutiveBitsSeries
             .filter { series -> series.contains('0') }
             .groupingBy { series -> series.length }.eachCount()
             .toSortedMap()
 
-        val seriesOf1sLengthsCount = consecutiveBitsSeries
-            .filter { series -> series.contains('1') }
-            .groupingBy { series -> series.length }.eachCount()
-            .toSortedMap()
+        val frequencyBySeriesOf0sLengthsGreaterThan5 = frequenciesBySeriesOf0sLengths.filter { (length, _) ->
+            length > 5
+        }.values.sum()
 
-        // TODO
+        frequenciesBySeriesOf0sLengths[1]?.shouldBeInRange(2315..2685)
+        frequenciesBySeriesOf0sLengths[2]?.shouldBeInRange(1114..1386)
+        frequenciesBySeriesOf0sLengths[3]?.shouldBeInRange(527..723)
+        frequenciesBySeriesOf0sLengths[4]?.shouldBeInRange(240..384)
+        frequenciesBySeriesOf0sLengths[5]?.shouldBeInRange(103..209)
+        frequencyBySeriesOf0sLengthsGreaterThan5 shouldBeInRange 103..209
     }
 
     @Test
@@ -68,7 +74,5 @@ class FIPS1402Test : AnnotationSpec() {
         x shouldBeLessThan 46.17
     }
 }
-
-infix fun Int.exclusiveRangeTo(other: Int): IntRange = IntRange(this + 1, other - 1)
 
 fun Int.squared() = this * this
