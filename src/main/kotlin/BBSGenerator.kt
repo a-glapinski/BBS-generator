@@ -1,5 +1,4 @@
 import java.math.BigInteger
-import kotlin.math.sqrt
 
 class BBSGenerator(
     p: BigInteger,
@@ -29,10 +28,7 @@ class BBSGenerator(
     private fun BigInteger.lsb() = this.toString(2).last()
 }
 
-private fun BigInteger.isPrime(): Boolean =
-    (BigInteger.TWO..sqrt(this.toDouble()).toBigInteger()).none { this % it == BigInteger.ZERO }
-
-private fun Double.toBigInteger() = this.toBigDecimal().toBigInteger()
+private fun BigInteger.isPrime(): Boolean = this.isProbablePrime(10)
 
 private tailrec fun greatestCommonDivisor(a: BigInteger, b: BigInteger): BigInteger {
     if (b == BigInteger.ZERO) return a
