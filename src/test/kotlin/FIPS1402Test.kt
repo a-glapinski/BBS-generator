@@ -8,9 +8,9 @@ import io.kotlintest.specs.AnnotationSpec
 
 class FIPS1402Test : AnnotationSpec() {
     private val bbsGenerator = BBSGenerator(
-        p = 11699L,
-        q = 7219L,
-        x = 6451L
+        p = 11699.toBigInteger(),
+        q = 7219.toBigInteger(),
+        x = 64513411.toBigInteger()
     )
     private val sequence = bbsGenerator.generateSequence(length = 20000)
     /**

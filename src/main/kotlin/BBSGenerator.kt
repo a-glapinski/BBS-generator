@@ -1,16 +1,19 @@
+import java.math.BigInteger
 import kotlin.math.sqrt
 
 class BBSGenerator(
-    p: Long,
-    q: Long,
+    p: BigInteger,
+    q: BigInteger,
     /** Seed */
-    private val x: Long
+    private val x: BigInteger
 ) {
     private val n = p * q
 
     init {
         require(p.isPrime() && q.isPrime()) { "P and Q have to be prime numbers." }
-        require(p % 4 == 3L && q % 4 == 3L) { "Both first and second prime has to be congruent to 3 mod 4." }
+        require(p % 4.toBigInteger() == 3.toBigInteger() && q % 4.toBigInteger() == 3.toBigInteger()) {
+            "Both first and second prime has to be congruent to 3 mod 4." 
+        }
         require(x.isCoprimeTo(n)) { "X must be coprime to N = P * Q." }
     }
 
@@ -23,16 +26,19 @@ class BBSGenerator(
         }
     }
 
-    private fun Long.lsb() = this.toString(radix = 2).last()
+    private fun BigInteger.lsb() = this.toString(2).last()
 }
 
-private fun Long.isPrime(): Boolean = (2..sqrt(this.toDouble()).toLong()).none { this % it == 0L }
+private fun BigInteger.isPrime(): Boolean =
+    (BigInteger.TWO..sqrt(this.toDouble()).toBigInteger()).none { this % it == BigInteger.ZERO }
 
-private tailrec fun greatestCommonDivisor(a: Long, b: Long): Long {
-    if (b == 0L) return a
+private fun Double.toBigInteger() = this.toBigDecimal().toBigInteger()
+
+private tailrec fun greatestCommonDivisor(a: BigInteger, b: BigInteger): BigInteger {
+    if (b == BigInteger.ZERO) return a
     return greatestCommonDivisor(b, a % b)
 }
 
-private fun Long.isCoprimeTo(other: Long): Boolean = greatestCommonDivisor(this, other) == 1L
+private fun BigInteger.isCoprimeTo(other: BigInteger): Boolean = greatestCommonDivisor(this, other) == BigInteger.ONE
 
-private fun Long.squared() = this * this
+private fun BigInteger.squared() = this * this

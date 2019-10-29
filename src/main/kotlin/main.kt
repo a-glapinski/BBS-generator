@@ -1,6 +1,6 @@
-const val P = 11699L
-const val Q = 7219L
-const val X = 6451L
+val P = 11699.toBigInteger()
+val Q = 7219.toBigInteger()
+val X = 64513411.toBigInteger()
 
 fun main() {
     val bbsGenerator = BBSGenerator(P, Q, X)
