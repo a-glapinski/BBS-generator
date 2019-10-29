@@ -10,7 +10,7 @@ class FIPS1402Test : AnnotationSpec() {
     private val bbsGenerator = BBSGenerator(
         p = 11699L,
         q = 7219L,
-        x = 645123L
+        x = 6451L
     )
     private val sequence = bbsGenerator.generateSequence(length = 20000)
     /**
@@ -65,9 +65,7 @@ class FIPS1402Test : AnnotationSpec() {
         val segments = sequence.chunked(size = 4)
         val segmentsCount = segments.groupingBy { it.toInt(radix = 2) }.eachCount().toSortedMap()
 
-        val sum = segmentsCount.toList().sumBy { (_, count) ->
-            count.squared()
-        }
+        val sum = segmentsCount.values.sumBy { count -> count.squared() }
         val x = (16.0 / 5000.0) * sum - 5000.0
 
         x shouldBeGreaterThan 2.16

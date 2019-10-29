@@ -1,6 +1,6 @@
 const val P = 11699L
 const val Q = 7219L
-const val X = 645123L
+const val X = 6451L
 
 fun main() {
     val bbsGenerator = BBSGenerator(P, Q, X)
